@@ -54,6 +54,14 @@ class LoginWin:
 
                 messagebox.showerror("Error", f"Error due to: {str(es)}")
 
+    def billingapp(self):
+        self.billroot = Toplevel()
+        self.billroot.grab_set()
+        self.billroot.title("Billing Software")
+        self.billroot.resizable(False,False)
+        self.billroot.geometry("1350x710+0+0")
+
+
 
 root = Tk()
 obj = LoginWin(root)
