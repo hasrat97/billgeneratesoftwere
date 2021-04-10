@@ -61,6 +61,23 @@ class LoginWin:
         self.billroot.resizable(False,False)
         self.billroot.geometry("1350x710+0+0")
 
+        # ============ customer Info Var ============
+
+        self.CnameVar = StringVar()
+        self.CphoneVar = StringVar()
+        self.billnoVar = StringVar()
+
+        r_bill = random.randint(1000, 9999)
+        self.billnoVar.set(r_bill)
+
+        self.billsearchVar = StringVar()
+
+        # ============ Products Form Var ============
+        self.Qty1Var = IntVar()
+        self.Qty2Var = IntVar()
+        self.Qty3Var = IntVar()
+        self.Qty4Var = IntVar()
+        self.Qty5Var = IntVar()
 
 
 root = Tk()
