@@ -130,6 +130,121 @@ class LoginWin:
             for i in row:
                 self.ProductList.append(i)
 
+        Skip
+        to
+        content
+        Using
+        University
+        of
+        Asia
+        Pacific
+        Mail
+        with screen readers
+        Meet
+        My
+        meetings
+        Hangouts
+
+        1
+        of
+        1, 841
+        (no subject)
+        Inbox
+
+        Hasrat
+        Zamila
+        Attachments
+        8: 40
+        PM(0
+        minutes
+        ago)
+        to
+        me
+
+        Attachments
+        area
+        self.ProductOne = StringVar()
+        self.ProductOne.set("--Select One--")
+
+        self.ProductTwo = StringVar()
+        self.ProductTwo.set("--Select One--")
+
+        self.ProductThree = StringVar()
+        self.ProductThree.set("--Select One--")
+
+        self.ProductFour = StringVar()
+        self.ProductFour.set("--Select One--")
+
+        self.ProductFive = StringVar()
+        self.ProductFive.set("--Select One--")
+
+        self.ProductSix = StringVar()
+        self.ProductSix.set("--Select One--")
+
+        self.ProductSeven = StringVar()
+        self.ProductSeven.set("--Select One--")
+
+        self.ProductEight = StringVar()
+        self.ProductEight.set("--Select One--")
+
+        self.ProductNine = StringVar()
+        self.ProductNine.set("--Select One--")
+
+        self.ProductTen = StringVar()
+        self.ProductTen.set("--Select One--")
+
+        pro1 = OptionMenu(ProFrame, self.ProductOne, *self.ProductList)
+        pro1.grid(row=0, column=0, pady=10, padx=10, sticky="w")
+        pro1.config(width=12, font=("arail", 10, "bold"))
+        pro1qtyEntry = Entry(ProFrame, textvariable=self.Qty1Var, width=10, font=("arial", 10, "bold"), bd=5,relief=SUNKEN).grid(row=0, column=1, pady=10, padx=10)
+
+        pro2 = OptionMenu(ProFrame, self.ProductTwo, *self.ProductList)
+        pro2.grid(row=1, column=0, pady=10, padx=10, sticky="w")
+        pro2.config(width=12, font=("arail", 10, "bold"))
+        pro2Entry = Entry(ProFrame, textvariable=self.Qty2Var, width=10, font=("arial", 10, "bold"), bd=5,relief=SUNKEN).grid(row=1, column=1, pady=10, padx=10)
+
+        pro3 = OptionMenu(ProFrame, self.ProductThree, *self.ProductList)
+        pro3.grid(row=2, column=0, pady=10, padx=10, sticky="w")
+        pro3.config(width=12, font=("arail", 10, "bold"))
+        pro3Entry = Entry(ProFrame, textvariable=self.Qty3Var, width=10, font=("arial", 10, "bold"), bd=5,relief=SUNKEN).grid(row=2, column=1, pady=10, padx=10)
+
+        pro4 = OptionMenu(ProFrame, self.ProductFour, *self.ProductList)
+        pro4.grid(row=3, column=0, pady=10, padx=10, sticky="w")
+        pro4.config(width=12, font=("arail", 10, "bold"))
+        pro4Entry = Entry(ProFrame, textvariable=self.Qty4Var, width=10, font=("arial", 10, "bold"), bd=5,relief=SUNKEN).grid(row=3, column=1, pady=10, padx=10)
+
+        pro5 = OptionMenu(ProFrame, self.ProductFive, *self.ProductList)
+        pro5.grid(row=4, column=0, pady=10, padx=10, sticky="w")
+        pro5.config(width=12, font=("arail", 10, "bold"))
+        pro5Entry = Entry(ProFrame, textvariable=self.Qty5Var, width=10, font=("arial", 10, "bold"), bd=5,relief=SUNKEN).grid(row=4, column=1, pady=10, padx=10)
+
+        pro6 = OptionMenu(ProFrame, self.ProductSix, *self.ProductList)
+        pro6.grid(row=5, column=0, pady=10, padx=10, sticky="w")
+        pro6.config(width=12, font=("arail", 10, "bold"))
+        pro6Entry = Entry(ProFrame, textvariable=self.Qty6Var, width=10, font=("arial", 10, "bold"), bd=5,relief=SUNKEN).grid(row=5, column=1, pady=10, padx=10)
+
+        pro7 = OptionMenu(ProFrame, self.ProductSeven, *self.ProductList)
+        pro7.grid(row=6, column=0, pady=10, padx=10, sticky="w")
+        pro7.config(width=12, font=("arail", 10, "bold"))
+        pro7Entry = Entry(ProFrame, textvariable=self.Qty7Var, width=10, font=("arial", 10, "bold"), bd=5,relief=SUNKEN).grid(row=6, column=1, pady=10, padx=10)
+
+        pro8 = OptionMenu(ProFrame, self.ProductEight, *self.ProductList)
+        pro8.grid(row=7, column=0, pady=10, padx=10, sticky="w")
+        pro8.config(width=12, font=("arail", 10, "bold"))
+        pro8Entry = Entry(ProFrame, textvariable=self.Qty8Var, width=10, font=("arial", 10, "bold"), bd=5,relief=SUNKEN).grid(row=7, column=1, pady=10, padx=10)
+
+        pro9 = OptionMenu(ProFrame, self.ProductNine, *self.ProductList)
+        pro9.grid(row=0, column=2, pady=10, padx=15, sticky="w")
+        pro9.config(width=12, font=("arail", 10, "bold"))
+        pro9Entry = Entry(ProFrame, textvariable=self.Qty9Var, width=10, font=("arial", 10, "bold"), bd=5,relief=SUNKEN).grid(row=0, column=3, pady=10, padx=15)
+
+        pro10 = OptionMenu(ProFrame, self.ProductTen, *self.ProductList)
+        pro10.grid(row=1, column=2, pady=10, padx=15, sticky="w")
+        pro10.config(width=12, font=("arail", 10, "bold"))
+        pro10Entry = Entry(ProFrame, textvariable=self.Qty10Var, width=10, font=("arial", 10, "bold"), bd=5,relief=SUNKEN).grid(row=1, column=3, pady=10, padx=15)
+
+
+
         # ================ Billing Frame ==================
         BillFrame = Frame(self.billroot, bd=7, relief=GROOVE)
         BillFrame.place(x=800, y=133, height=450, width=550)
