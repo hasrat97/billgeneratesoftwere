@@ -61,6 +61,18 @@ class LoginWin:
         self.billroot.resizable(False,False)
         self.billroot.geometry("1350x710+0+0")
 
+        #========= Variables ===================
+        global admin
+        con = pymysql.connect(host="localhost", user="root", password="root1234", database="billdata")
+        cur = con.cursor()
+        q = "select * from admin where username=%s"
+        cur.execute(q,(self.manageruserVar.get()))
+        rows = cur.fetchall()
+        for row in rows:
+            adminname = [row[0], row[1], row[2]]
+            username = adminname[0]
+            admin = adminname[2]
+
         # ============ customer Info Var ============
 
         self.CnameVar = StringVar()
@@ -95,6 +107,41 @@ class LoginWin:
 
         CPhoelbl = Label(CFrame, text="Phone Number: ", font=("arial", 12, "bold"), bg="purple", fg="white").grid(row=0,column=2, padx=10, pady=5, sticky="w")
         CPhoneEntry = Entry(CFrame, textvariable=self.CphoneVar, width=20, font=("arial", 12, "bold"), bd=7,relief=SUNKEN).grid(row=0, column=3, padx=10, pady=5)
+
+        billnumber = Label(CFrame, text="Bill Number: ", font=("arial", 12, "bold"), bg="purple", fg="white").grid(row=0, column=4, padx=10, pady=5, sticky="w")
+        billnumberEntry = Entry(CFrame, textvariable=self.billsearchVar, width=20, font=("arial", 12, "bold"), bd=7,relief=SUNKEN).grid(row=0, column=5, padx=10, pady=5)
+
+        billsearchbtn = Button(CFrame, command=self.search_bill, text="Search Bill", font=("arial", 12, "bold"),bg="skyblue", fg="#222222").grid(row=0, column=6, padx=10, pady=5)
+
+        #============================= Products Frame ===================================
+
+        ProFrame = LabelFrame(self.billroot,text="Product Section",fg="gold",bd=7,relief=GROOVE,bg="purple",font=("arial", 10,"bold"))
+        ProFrame.place(x=0,y=133,width=800,height=450)
+
+        global pro1price
+
+        con = pymysql.connect(host="localhost",user="root",password="root1234",database="billdata")
+        cur = con.cursor()
+        q = "select title from product"
+        cur.execute(q)
+        rows = cur.fetchall()
+        self.ProductList = list()
+        for row in rows:
+            for i in row:
+                self.ProductList.append(i)
+
+        # ================ Billing Frame ==================
+        BillFrame = Frame(self.billroot, bd=7, relief=GROOVE)
+        BillFrame.place(x=800, y=133, height=450, width=550)
+
+        bill_title = Label(BillFrame, text="Billing Area", bd=5, relief=GROOVE, font=("arial", 12, "bold"),pady=5)
+        bill_title.pack(side=TOP, fill=X)
+        scroll_y = Scrollbar(BillFrame, orient=VERTICAL)
+        self.txtarea = Text(BillFrame, yscrollcommand=scroll_y.set)
+        scroll_y.pack(side=RIGHT, fill=Y)
+        scroll_y.config(command=self.txtarea.yview)
+        self.txtarea.pack(fill=BOTH, expand=1)
+
 
 root = Tk()
 obj = LoginWin(root)
