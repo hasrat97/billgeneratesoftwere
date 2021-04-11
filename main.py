@@ -2,6 +2,8 @@ from tkinter import *
 import random,os
 from tkinter import messagebox,Toplevel,ttk,filedialog
 import pymysql
+import time,tempfile
+import pandas
 
 class LoginWin:
     def __init__(self,root):
@@ -90,6 +92,18 @@ class LoginWin:
         self.Qty3Var = IntVar()
         self.Qty4Var = IntVar()
         self.Qty5Var = IntVar()
+        self.Qty6Var = IntVar()
+        self.Qty7Var = IntVar()
+        self.Qty8Var = IntVar()
+        self.Qty9Var = IntVar()
+        self.Qty10Var = IntVar()
+
+        # ============ Bottom Form Var ============
+        self.totalVar = StringVar()
+        self.DisVar = IntVar()
+        self.netTotalVar = StringVar()
+        self.CpayVar = IntVar()
+        self.CreturenVar = StringVar()
 
         headertitle = Label(self.billroot, text="Billing System", bg="purple", fg="white", font=("arial", 20, "bold"),pady=10, bd=7, relief=GROOVE)
         headertitle.place(x=0, y=0, relwidth=1)
@@ -497,8 +511,279 @@ class LoginWin:
                 messagebox.showerror("Error", "Please a select product name")
             else:
                 self.welcomebill()
+                if self.Qty1Var.get() !=0 or self.ProductOne.get() != "--Select One--":
+                    self.txtarea.insert(END, f" {self.p1[:17]} \t\t {str(self.Qty1Var.get())}\t\t\t{str(self.totalp1)} \n")
+                    #======== Quantity updating on database =============
+                    con = pymysql.connect(host="localhost", user="root", password="root1234", database="billdata")
+                    cur = con.cursor()
+                    q = "select * from product where title=%s"
+                    cur.execute(q, (self.ProductOne.get()))
+                    rows = cur.fetchall()
+                    for row in rows:
+                        oldstock1 = row[3]
+                        newstock1 = oldstock1 - self.Qty1Var.get()
+                    q = "update product set qty=%s where title=%s"
+                    cur.execute(q,(newstock1,self.ProductOne.get()))
+                    con.commit()
+                    con.close()
 
+                if self.Qty2Var.get() !=0 or self.ProductTwo.get() != "--Select One--":
+                    self.txtarea.insert(END, f" {self.p2[:17]} \t\t {str(self.Qty2Var.get())}\t\t\t{str(self.totalp2)} \n")
+                    #======== Quantity updating on database =============
+                    con = pymysql.connect(host="localhost", user="root", password="root1234", database="billdata")
+                    cur = con.cursor()
+                    q = "select * from product where title=%s"
+                    cur.execute(q, (self.ProductTwo.get()))
+                    rows = cur.fetchall()
+                    for row in rows:
+                        oldstock2 = row[3]
+                        newstock2 = oldstock2 - self.Qty2Var.get()
+                    q = "update product set qty=%s where title=%s"
+                    cur.execute(q,(newstock2,self.ProductTwo.get()))
+                    con.commit()
+                    con.close()
 
+                if self.Qty3Var.get() !=0 or self.ProductThree.get() != "--Select One--":
+                    self.txtarea.insert(END, f" {self.p3[:17]} \t\t {str(self.Qty3Var.get())}\t\t\t{str(self.totalp3)} \n")
+                    #======== Quantity updating on database =============
+                    con = pymysql.connect(host="localhost", user="root", password="root1234", database="billdata")
+                    cur = con.cursor()
+                    q = "select * from product where title=%s"
+                    cur.execute(q, (self.ProductThree.get()))
+                    rows = cur.fetchall()
+                    for row in rows:
+                        oldstock3 = row[3]
+                        newstock3 = oldstock3 - self.Qty3Var.get()
+                    q = "update product set qty=%s where title=%s"
+                    cur.execute(q,(newstock3,self.ProductThree.get()))
+                    con.commit()
+                    con.close()
+
+                if self.Qty4Var.get() !=0 or self.ProductFour.get() != "--Select One--":
+                    self.txtarea.insert(END, f" {self.p4[:17]} \t\t {str(self.Qty4Var.get())}\t\t\t{str(self.totalp4)} \n")
+                    #======== Quantity updating on database =============
+                    con = pymysql.connect(host="localhost", user="root", password="root1234", database="billdata")
+                    cur = con.cursor()
+                    q = "select * from product where title=%s"
+                    cur.execute(q, (self.ProductFour.get()))
+                    rows = cur.fetchall()
+                    for row in rows:
+                        oldstock4 = row[3]
+                        newstock4 = oldstock4 - self.Qty4Var.get()
+                    q = "update product set qty=%s where title=%s"
+                    cur.execute(q,(newstock4,self.ProductFour.get()))
+                    con.commit()
+                    con.close()
+
+                if self.Qty5Var.get() !=0 or self.ProductFive.get() != "--Select One--":
+                    self.txtarea.insert(END, f" {self.p5[:17]} \t\t {str(self.Qty5Var.get())}\t\t\t{str(self.totalp5)} \n")
+                    #======== Quantity updating on database =============
+                    con = pymysql.connect(host="localhost", user="root", password="root1234", database="billdata")
+                    cur = con.cursor()
+                    q = "select * from product where title=%s"
+                    cur.execute(q, (self.ProductFive.get()))
+                    rows = cur.fetchall()
+                    for row in rows:
+                        oldstock5 = row[3]
+                        newstock5 = oldstock5 - self.Qty5Var.get()
+                    q = "update product set qty=%s where title=%s"
+                    cur.execute(q,(newstock5,self.ProductFive.get()))
+                    con.commit()
+                    con.close()
+
+                if self.Qty6Var.get() !=0 or self.ProductSix.get() != "--Select One--":
+                    self.txtarea.insert(END, f" {self.p6[:17]} \t\t {str(self.Qty6Var.get())}\t\t\t{str(self.totalp6)} \n")
+                    #======== Quantity updating on database =============
+                    con = pymysql.connect(host="localhost", user="root", password="root1234", database="billdata")
+                    cur = con.cursor()
+                    q = "select * from product where title=%s"
+                    cur.execute(q, (self.ProductSix.get()))
+                    rows = cur.fetchall()
+                    for row in rows:
+                        oldstock6 = row[3]
+                        newstock6 = oldstock6 - self.Qty6Var.get()
+                    q = "update product set qty=%s where title=%s"
+                    cur.execute(q,(newstock6,self.ProductSix.get()))
+                    con.commit()
+                    con.close()
+
+                if self.Qty7Var.get() !=0 or self.ProductSeven.get() != "--Select One--":
+                    self.txtarea.insert(END, f" {self.p7[:17]} \t\t {str(self.Qty7Var.get())}\t\t\t{str(self.totalp7)} \n")
+                    #======== Quantity updating on database =============
+                    con = pymysql.connect(host="localhost", user="root", password="root1234", database="billdata")
+                    cur = con.cursor()
+                    q = "select * from product where title=%s"
+                    cur.execute(q, (self.ProductSeven.get()))
+                    rows = cur.fetchall()
+                    for row in rows:
+                        oldstock7 = row[3]
+                        newstock7 = oldstock7 - self.Qty7Var.get()
+                    q = "update product set qty=%s where title=%s"
+                    cur.execute(q,(newstock7,self.ProductSeven.get()))
+                    con.commit()
+                    con.close()
+
+                if self.Qty8Var.get() !=0 or self.ProductEight.get() != "--Select One--":
+                    self.txtarea.insert(END, f" {self.p8[:17]} \t\t {str(self.Qty8Var.get())}\t\t\t{str(self.totalp8)} \n")
+                    #======== Quantity updating on database =============
+                    con = pymysql.connect(host="localhost", user="root", password="root1234", database="billdata")
+                    cur = con.cursor()
+                    q = "select * from product where title=%s"
+                    cur.execute(q, (self.ProductEight.get()))
+                    rows = cur.fetchall()
+                    for row in rows:
+                        oldstock8 = row[3]
+                        newstock8 = oldstock8 - self.Qty8Var.get()
+                    q = "update product set qty=%s where title=%s"
+                    cur.execute(q,(newstock8,self.ProductEight.get()))
+                    con.commit()
+                    con.close()
+
+                if self.Qty9Var.get() !=0 or self.ProductNine.get() != "--Select One--":
+                    self.txtarea.insert(END, f" {self.p9[:17]} \t\t {str(self.Qty9Var.get())}\t\t\t{str(self.totalp9)} \n")
+                    #======== Quantity updating on database =============
+                    con = pymysql.connect(host="localhost", user="root", password="root1234", database="billdata")
+                    cur = con.cursor()
+                    q = "select * from product where title=%s"
+                    cur.execute(q, (self.ProductNine.get()))
+                    rows = cur.fetchall()
+                    for row in rows:
+                        oldstock9 = row[3]
+                        newstock9 = oldstock9 - self.Qty9Var.get()
+                    q = "update product set qty=%s where title=%s"
+                    cur.execute(q,(newstock9,self.ProductNine.get()))
+                    con.commit()
+                    con.close()
+
+                if self.Qty10Var.get() !=0 or self.ProductTen.get() != "--Select One--":
+                    self.txtarea.insert(END, f" {self.p10[:17]} \t\t {str(self.Qty10Var.get())}\t\t\t{str(self.totalp10)} \n\n")
+                    #======== Quantity updating on database =============
+                    con = pymysql.connect(host="localhost", user="root", password="root1234", database="billdata")
+                    cur = con.cursor()
+                    q = "select * from product where title=%s"
+                    cur.execute(q, (self.ProductTen.get()))
+                    rows = cur.fetchall()
+                    for row in rows:
+                        oldstock10 = row[3]
+                        newstock10 = oldstock10 - self.Qty10Var.get()
+                    q = "update product set qty=%s where title=%s"
+                    cur.execute(q,(newstock10,self.ProductTen.get()))
+                    con.commit()
+                    con.close()
+
+                if self.totalVar.get() != 0:
+                    self.txtarea.insert(END, "================================================================\n")
+                    self.txtarea.insert(END, f"\t\t\t\t\t Total:     {self.totalVar.get()} \n")
+                if self.DisVar.get() != 0:
+                    self.txtarea.insert(END, f"\t\t\t\t\t Discount : {self.DisVar.get()}\n")
+                    self.txtarea.insert(END, "================================================================\n")
+
+                if self.netTotalVar.get() != 0:
+                    self.txtarea.insert(END, "================================================================\n")
+                    self.txtarea.insert(END, f"\t\t\t\t\t Net Total: {self.netTotalVar.get()}\n")
+                    self.txtarea.insert(END, "================================================================\n\n")
+                    self.txtarea.insert(END,"Thank you for visiting us.")
+
+                    self.save_bill()
+
+            # ============ Sales Data Inserting to SQL Database =========================
+            try:
+                if self.CnameVar.get() != "" or self.CphoneVar.get() != "":
+                    global bl, na, phn, nbl, dis, dt
+                    bl = self.billnoVar.get()
+                    na = self.CnameVar.get()
+                    phn = self.CphoneVar.get()
+                    nbl = self.netTotalVar.get()
+                    dis = self.DisVar.get()
+                    dt = time.strftime("%d/%m/%Y")
+                    con = pymysql.connect(host="localhost", user="root", password="root1234",database="billdata")
+                    cur = con.cursor()
+                    q = "insert into report values(%s,%s,%s,%s,%s,%s)"
+                    cur.execute(q, (bl, na, phn, nbl, dis, dt))
+                    con.commit()
+                    con.close()
+                    messagebox.showinfo("Notification","Data of bill no " + self.billnoVar.get() + " inserted successfully",parent=self.billroot)
+                else:
+                    messagebox.showerror("Error", "Name and Phone number are required", parent=self.billroot)
+            except:
+                messagebox.showerror("Error", "Something went wrong with your database", parent=self.billroot)
+
+    def save_bill(self):
+        pass
+    def search_bill(self):
+        m = "no"
+        for i in os.listdir("saveBill/"):
+            if i.split(".")[0] == self.billsearchVar.get():
+                file = open(f"saveBill/{i}", "r")
+                self.txtarea.delete("1.0", END)
+                for d in file:
+                    self.txtarea.insert(END, d)
+                file.close()
+                m = "yes"
+        if m == "no":
+            messagebox.showerror("Error", "Invalid Bill Number.", parent=self.billroot)
+
+    def clear_bill(self):
+        pass
+
+    # =============== Add User window ===========================
+
+    def AddUser(self):
+        global userroot,userTable
+        userroot = Toplevel()
+        userroot.grab_set()
+        userroot.geometry("750x500+300+50")
+        userroot.title("Billing system - Add User")
+
+        #========== Variable ==============
+        self.UserVar = StringVar()
+        self.PassVar = StringVar()
+        self.RuleVar = StringVar()
+
+        title = Label(userroot, text="Control User", bg="purple", fg="white", font=("arail", 13, "bold"), pady=10)
+        title.place(x=0, y=0, relwidth=1)
+        adduserFrame = LabelFrame(userroot, text="Add New user", font=("arail", 12, "bold"), fg="gold", bd=7,relief=GROOVE, bg="purple")
+        adduserFrame.place(x=0, y=42, width=400, height=450)
+
+        usernamelbl = Label(adduserFrame,text="User Name: ",font=("arial",12,"bold"),bg="purple",fg="white").grid(row=0,column=0,pady=10,padx=10,sticky="w")
+        usernametxt = Entry(adduserFrame,textvariable=self.UserVar,width=15,bd=5,relief=SUNKEN,font=("arial",12,"bold")).grid(row=0,column=1,pady=10,padx=10)
+
+        userpasslbl = Label(adduserFrame,text="Password: ",font=("arial",12,"bold"),bg="purple",fg="white").grid(row=1,column=0,pady=10,padx=10,sticky="w")
+        userpasstxt = Entry(adduserFrame,textvariable=self.PassVar,width=15,bd=5,relief=SUNKEN,font=("arial",12,"bold")).grid(row=1,column=1,pady=10,padx=10)
+
+        userrulelbl = Label(adduserFrame,text="User Rule: ",font=("arial",12,"bold"),bg="purple",fg="white").grid(row=2,column=0,pady=10,padx=10,sticky="w")
+        userruletxt = ttk.Combobox(adduserFrame,textvariable=self.RuleVar,font=("arail",12,"bold"),width=15)
+        userruletxt["values"] = ("Admin","User")
+        userruletxt.current(1)
+        userruletxt.grid(row=2,column=1,pady=10,padx=10)
+
+        useraddbtn = Button(adduserFrame,command=self.user_insert,text="Add User",font=("arail",12,"bold"),bg="black",fg="white",width=15,pady=10).grid(row=4,column=0,pady=10,padx=5)
+        userupdatebtn = Button(adduserFrame,command=self.user_update,text="Update",font=("arail",12,"bold"),bg="black",fg="white",width=15,pady=10).grid(row=4,column=1,pady=10,padx=5)
+        userdeletebtn = Button(adduserFrame,command=self.user_delete,text="Delete",font=("arail",12,"bold"),bg="black",fg="white",width=15,pady=10).grid(row=5,column=0,pady=10,padx=5)
+        exitbtn = Button(adduserFrame,command=self.user_exit,text="Exit",font=("arail",12,"bold"),bg="black",fg="white",width=15,pady=10).grid(row=5,column=1,pady=10,padx=5)
+
+        ShowuserFrame = Frame(userroot,bd=7,relief=GROOVE)
+        ShowuserFrame.place(x=400,y=42,height=450,width=350)
+        title = Label(ShowuserFrame,text="All Users",font=("arial",12,"bold"),bg="purple",fg="white")
+        title.place(x=0,y=0,relwidth=1)
+
+        x_scroll = Scrollbar(ShowuserFrame,orient=HORIZONTAL)
+        y_scroll = Scrollbar(ShowuserFrame,orient=VERTICAL)
+        userTable = ttk.Treeview(ShowuserFrame,columns=("username","password","rule"),xscrollcommand=x_scroll.set,yscrollcommand=y_scroll.set)
+        x_scroll.pack(side=BOTTOM,fill=X)
+        y_scroll.pack(side=RIGHT,fill=Y)
+        x_scroll.config(command=userTable.xview)
+        y_scroll.config(command=userTable.yview)
+        userTable.heading("username",text="User Name")
+        userTable.heading("password",text="Password")
+        userTable.heading("rule",text="User Rule")
+        userTable["show"]="headings"
+        userTable.column("username",width=50)
+        userTable.column("password",width=50)
+        userTable.column("rule",width=50)
+        userTable.pack(fill=BOTH,expand=1)
+        userTable.bind("<ButtonRelease>",self.getuser_cur)
+        self.fetch_user()
 
 
 
