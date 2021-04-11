@@ -130,39 +130,6 @@ class LoginWin:
             for i in row:
                 self.ProductList.append(i)
 
-        Skip
-        to
-        content
-        Using
-        University
-        of
-        Asia
-        Pacific
-        Mail
-        with screen readers
-        Meet
-        My
-        meetings
-        Hangouts
-
-        1
-        of
-        1, 841
-        (no subject)
-        Inbox
-
-        Hasrat
-        Zamila
-        Attachments
-        8: 40
-        PM(0
-        minutes
-        ago)
-        to
-        me
-
-        Attachments
-        area
         self.ProductOne = StringVar()
         self.ProductOne.set("--Select One--")
 
