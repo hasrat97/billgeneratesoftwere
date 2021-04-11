@@ -852,6 +852,472 @@ class LoginWin:
         userTable.bind("<ButtonRelease>",self.getuser_cur)
         self.fetch_user()
 
+    def user_insert(self):
+
+        if self.UserVar.get() == "" and self.PassVar.get() == "" and self.RuleVar.get() == "":
+            messagebox.showerror("Error", "All Fields are required.", parent=userroot)
+        else:
+            try:
+                self.user = self.UserVar.get()
+                self.password = self.PassVar.get()
+                self.rule = self.RuleVar.get()
+
+                con = pymysql.connect(host="localhost", user="root", password="root1234", database="billdata")
+                cur = con.cursor()
+                q = "insert into admin values(%s,%s,%s)"
+                cur.execute(q, (self.user, self.password, self.rule))
+                con.commit()
+                self.fetch_user()
+                con.close()
+                messagebox.showinfo("Notification", "User Added Successfully.", parent=userroot)
+                self.UserVar.set("")
+                self.PassVar.set("")
+
+
+            except:
+                messagebox.showerror("Error", "User name already exist", parent=userroot)
+
+    def fetch_user(self):
+        con = pymysql.connect(host="localhost", user="root", password="root1234", database="billdata")
+        cur = con.cursor()
+        q = "select * from admin"
+        cur.execute(q)
+        rows=cur.fetchall()
+        userTable.delete(*userTable.get_children())
+        for row in rows:
+            singleuser=[row[0],row[1],row[2]]
+            userTable.insert("",END,values=singleuser)
+    def getuser_cur(self, ev):
+        cc = userTable.focus()
+        content = userTable.item(cc)
+        pp = content["values"]
+        if len(pp) !=0:
+            self.UserVar.set(pp[0])
+            self.PassVar.set(pp[1])
+            self.RuleVar.set(pp[2])
+
+    def user_update(self):
+        mess = messagebox.askyesno("Update","Do you want to update user?",parent=userroot)
+        if mess>0:
+            con = pymysql.connect(host="localhost", user="root", password="root1234", database="billdata")
+            cur = con.cursor()
+            q = "update admin set password=%s,rule=%s where username=%s"
+            cur.execute(q,(self.PassVar.get(),self.RuleVar.get(),self.UserVar.get()))
+            messagebox.showinfo("Notification","User updated Successfully",parent=userroot)
+            con.commit()
+            self.fetch_user()
+            self.UserVar.set("")
+            self.PassVar.set("")
+            con.close()
+    def user_delete(self, ev):
+        mess = messagebox.askyesno("Update","Do you want to delete user?",parent=userroot)
+        if mess>0:
+            con = pymysql.connect(host="localhost", user="root", password="root1234", database="billdata")
+            cur = con.cursor()
+            q = "delete from admin where username=%s"
+            self.UserVar.get()
+            cur.execute(q,(self.UserVar.get()))
+            messagebox.showinfo("Notification","User deleted Successfully",parent=userroot)
+            con.commit()
+            self.fetch_user()
+            self.UserVar.set("")
+            self.PassVar.set("")
+            con.close()
+    def user_exit(self):
+        mess = messagebox.askyesno("Exit","Do you want to close?",parent=userroot)
+        if mess>0:
+            userroot.destroy()
+#=============== Add Products window ===========================
+    def AddPro(self):
+        global proot,produttable
+        proot = Toplevel()
+        proot.grab_set()
+        proot.geometry("750x600+300+50")
+        proot.title("Billing system")
+
+        title =Label(proot,text="Add New Products",bg="purple",fg="white",font=("arail",13,"bold"),pady=10)
+        title.place(x=0,y=0,relwidth=1)
+
+
+        #============ Variables =========
+
+        self.idVar = StringVar()
+        self.titleVar = StringVar()
+        self.priceVar = StringVar()
+        self.qtyVar = StringVar()
+
+        pFrame = LabelFrame(proot,text="Add Product Details",font=("arail",12,"bold"),fg="gold",bd=7,relief=GROOVE,bg="purple")
+        pFrame.place(x=0,y=42,width=400,height=450)
+
+        product_idlbl =Label(pFrame,text="Product Code",font=("arial", 12,"bold"),bg="purple",fg="white").grid(row=0,column=0,pady=5,padx=10,sticky="w")
+        Product_idtxt = Entry(pFrame,textvariable=self.idVar,width=15,bd=5,relief=SUNKEN,font=("arial",12,"bold")).grid(row=0,column=1,pady=5,padx=10)
+
+        product_namelbl =Label(pFrame,text="Product Title",font=("arial", 12,"bold"),bg="purple",fg="white").grid(row=1,column=0,pady=5,padx=10,sticky="w")
+        Product_nametxt = Entry(pFrame,textvariable=self.titleVar,width=15,bd=5,relief=SUNKEN,font=("arial",12,"bold")).grid(row=1,column=1,pady=5,padx=10)
+
+        product_pricelbl =Label(pFrame,text="Product Price",font=("arial", 12,"bold"),bg="purple",fg="white").grid(row=2,column=0,pady=5,padx=10,sticky="w")
+        Product_pricetxt = Entry(pFrame,textvariable=self.priceVar,width=15,bd=5,relief=SUNKEN,font=("arial",12,"bold")).grid(row=2,column=1,pady=5,padx=10)
+
+        product_qtylbl =Label(pFrame,text="Product Quantity",font=("arial", 12,"bold"),bg="purple",fg="white").grid(row=3,column=0,pady=5,padx=10,sticky="w")
+        Product_qtytxt = Entry(pFrame,textvariable=self.qtyVar,width=15,bd=5,relief=SUNKEN,font=("arial",12,"bold")).grid(row=3,column=1,pady=5,padx=10)
+
+        #=========== Data Table Frame ====================
+        dataFrame = Frame(proot,bd=7,relief=GROOVE)
+        dataFrame.place(y=42,x=400,width=350,height=450)
+
+        title = Label(dataFrame,text="Products",font=("arial", 12,"bold"),bg="black",fg="white",pady=5)
+        title.place(x=0,y=0, relwidth=1)
+        scroll_x = Scrollbar(dataFrame,orient=HORIZONTAL)
+        scroll_y = Scrollbar(dataFrame,orient=VERTICAL)
+        produttable = ttk.Treeview(dataFrame,columns=("id","title","price","qty"),xscrollcommand=scroll_x.set,yscrollcommand=scroll_y.set)
+        scroll_x.pack(side=BOTTOM,fill=X)
+        scroll_y.pack(side=RIGHT,fill=Y)
+        scroll_x.config(command=produttable.xview)
+        scroll_y.config(command=produttable.yview)
+        produttable.heading("id",text="ID")
+        produttable.heading("title",text="Title")
+        produttable.heading("price",text="Price")
+        produttable.heading("qty",text="Quantity")
+        produttable["show"]="headings"
+        produttable.column("id",width=50)
+        produttable.column("title",width=150)
+        produttable.column("price",width=50)
+        produttable.column("qty",width=50)
+        produttable.pack(fill=BOTH,expand=1)
+        produttable.bind("<ButtonRelease>",self.get_curcur)
+        self.fetch_data()
+
+
+
+        #=========== Buttons Frame =======================
+        btnFrame = LabelFrame(proot, text="Buttons", font=("arail", 12, "bold"), fg="gold", bd=7,relief=GROOVE, bg="purple")
+        btnFrame.place(x=0, y=490, relwidth=1, height=120)
+
+        addbtn = Button(btnFrame,command=self.addproduct,text="Submit Data",font=("arial",12,"bold"),bd=5,pady=5,width=10).grid(row=0,column=0,pady=15,padx=10)
+        updatebtn = Button(btnFrame,command=self.pupdate,text="Update",font=("arial",12,"bold"),bd=5,pady=5,width=10).grid(row=0,column=1,pady=15,padx=10)
+        clearbtn = Button(btnFrame,command=self.pclear,text="Clear",font=("arial",12,"bold"),bd=5,pady=5,width=10).grid(row=0,column=2,pady=15,padx=10)
+        deletebtn = Button(btnFrame,command=self.pdelete,text="Delete",font=("arial",12,"bold"),bd=5,pady=5,width=10).grid(row=0,column=3,pady=15,padx=10)
+        exitbtn = Button(btnFrame,command=self.pexit,text="Exit",font=("arial",12,"bold"),bd=5,pady=5,width=10).grid(row=0,column=4,pady=15,padx=10)
+
+    #========== Insert products into database ===========================
+    def addproduct(self):
+        global pid
+        if self.idVar.get()=="" and self.titleVar.get()=="" and self.priceVar.get()=="" and self.qtyVar.get()=="":
+            messagebox.showerror("Error","All fields are required.",parent=proot)
+        else:
+            self.pid = self.idVar.get()
+            self.title = self.titleVar.get()
+            self.price = self.priceVar.get()
+            self.qty = self.qtyVar.get()
+            try:
+                con = pymysql.connect(host="localhost",user="root",password="root1234",database="billdata")
+                cur= con.cursor()
+                q = "insert into product values(%s,%s,%s,%s)"
+                cur.execute(q,(self.pid, self.title, self.price, self.qty))
+                con.commit()
+                con.close()
+                messagebox.showinfo("Notification","Product added successfully",parent=proot)
+
+                self.idVar.set("")
+                self.titleVar.set("")
+                self.priceVar.set("")
+                self.qtyVar.set("")
+                self.fetch_data()
+            except:
+                messagebox.showerror("Error","Something went wrong with database",parent=proot)
+    def fetch_data(self):
+        try:
+            con = pymysql.connect(host="localhost", user="root", password="root1234", database="billdata")
+            cur = con.cursor()
+            q = "select * from product"
+            cur.execute(q)
+            rows = cur.fetchall()
+            produttable.delete(*produttable.get_children())
+            for row in rows:
+                single = [row[0], row[1], row[2], row[3]]
+                produttable.insert("", END, values=single)
+        except:
+            messagebox.showerror("Error", "Something went wrong with database", parent=proot)
+    def get_curcur(self,ev):
+        cc = produttable.focus()
+        content = produttable.item(cc)
+        p = content["values"]
+        if p!=0:
+            self.idVar.set(p[0])
+            self.titleVar.set(p[1])
+            self.priceVar.set(p[2])
+            self.qtyVar.set(p[3])
+    def pupdate(self):
+        mess = messagebox.askyesno("Notification","Do you want to update data?", parent=proot)
+        if mess>0:
+            try:
+                con = pymysql.connect(host="localhost", user="root", password="root1234", database="billdata")
+                cur = con.cursor()
+                q = "update product set title=%s,price=%s,qty=%s where id=%s"
+                cur.execute(q,(self.titleVar.get(),self.priceVar.get(),self.qtyVar.get(),self.idVar.get()))
+                con.commit()
+                self.fetch_data()
+                self.idVar.set("")
+                self.titleVar.set("")
+                self.priceVar.set("")
+                self.qtyVar.set("")
+                con.close()
+            except:
+                messagebox.showerror("Error", "Something went wrong with database", parent=proot)
+    def pdelete(self):
+        mess = messagebox.askyesno("Notification","Do you want to Delete?", parent=proot)
+        if mess>0:
+            try:
+                con = pymysql.connect(host="localhost", user="root", password="root1234", database="billdata")
+                cur = con.cursor()
+                q = "delete from product where id=%s"
+                cur.execute(q,(self.idVar.get()))
+                con.commit()
+                self.fetch_data()
+                self.idVar.set("")
+                self.titleVar.set("")
+                self.priceVar.set("")
+                self.qtyVar.set("")
+                con.close()
+            except:
+                messagebox.showerror("Error", "Something went wrong with database", parent=proot)
+    def pclear(self):
+        mess = messagebox.askyesno("Exit","Do you want to Clear?", parent=proot)
+        if mess >0:
+            self.idVar.set("")
+            self.titleVar.set("")
+            self.priceVar.set("")
+            self.qtyVar.set("")
+    def pexit(self):
+        mess = messagebox.askyesno("Exit","Do you want to Exit?", parent=proot)
+        if mess >0:
+            #self.billroot.destroy()
+            proot.destroy()
+            #self.billingapp()
+
+#=============== Report window ===========================
+    def rewin(self):
+        global reroot,reFrame
+        reroot = Toplevel()
+        reroot.grab_set()
+        reroot.title("Sales Report")
+        reroot.geometry("1000x650+200+30")
+        title = Label(reroot,text="Daily Sales Report",font=("arial",15,"bold"),bg="purple",fg="white")
+        title.pack(fill=X,side=TOP)
+
+        #=====================Variable ===================
+        global nameVar, phonVar,billVar,dateVar,reportTable
+        self.nameVar = StringVar()
+        self.phnVar = StringVar()
+        self.billVar = StringVar()
+        self.dateVar = StringVar()
+
+        sFrame = LabelFrame(reroot,text="Search Area",font=("arial",12,"bold"),fg="gold",bg="purple",bd=7,relief=GROOVE)
+        sFrame.place(x=0,y=30,relwidth=1,height=100)
+
+        namelbl = Label(sFrame,text="Name: ",font=("arial",12,"bold"),fg="white",bg="purple").grid(row=0,column=0,padx=5,pady=10,sticky="w")
+        nameEntry = Entry(sFrame,textvariable=self.nameVar,width=13,bd=5,relief=SUNKEN,font=("arial",12,"bold")).grid(row=0,column=1,pady=10,padx=5)
+
+        phonelbl = Label(sFrame,text="Phone: ",font=("arial",12,"bold"),fg="white",bg="purple").grid(row=0,column=2,padx=5,pady=10,sticky="w")
+        phoneEntry = Entry(sFrame,textvariable=self.phnVar,width=13,bd=5,relief=SUNKEN,font=("arial",12,"bold")).grid(row=0,column=3,pady=10,padx=5)
+
+        billnolbl = Label(sFrame,text="Bill No: ",font=("arial",12,"bold"),fg="white",bg="purple").grid(row=0,column=4,padx=5,pady=10,sticky="w")
+        billnoEntry = Entry(sFrame,textvariable=self.billVar,width=13,bd=5,relief=SUNKEN,font=("arial",12,"bold")).grid(row=0,column=5,pady=10,padx=5)
+
+        datelbl = Label(sFrame,text="Date: ",font=("arial",12,"bold"),fg="white",bg="purple").grid(row=0,column=6,padx=5,pady=10,sticky="w")
+        dateEntry = Entry(sFrame,textvariable=self.dateVar,width=13,bd=5,relief=SUNKEN,font=("arial",12,"bold")).grid(row=0,column=7,pady=10,padx=5)
+
+        searchbtn = Button(sFrame,command=self.filter,text="Filter",font=("arial",11,"bold"),bd=5,width=10).grid(row=0,column=8,pady=10,padx=5)
+
+
+        reFrame = LabelFrame(reroot,text="Report",font=("arial", 12,"bold"),fg="gold",bd=5,relief=GROOVE,bg="black")
+        reFrame.place(x=0,y=130,relwidth=1,height=450)
+
+        ##------------ Show Data Frame -----------------------------------------
+        style = ttk.Style()
+        style.configure("Treeview.Heading", font=("arial", 10, "bold"))
+        style.configure("Treeview", font=("arial", 10, "bold"),bg="skyblue")
+        scroll_x = Scrollbar(reFrame,orient=HORIZONTAL)
+        scroll_y = Scrollbar(reFrame,orient=VERTICAL)
+        reportTable = ttk.Treeview(reFrame,columns=("bill_no","Name","Phone","Net Total", "Discount", "Date"),xscrollcommand=scroll_x.set, yscrollcommand=scroll_y.set)
+        scroll_x.pack(side=BOTTOM,fill=X)
+        scroll_y.pack(side=RIGHT,fill=Y)
+        scroll_x.config(command=reportTable.xview)
+        scroll_y.config(command=reportTable.yview)
+        reportTable.heading("bill_no", text="Bill Number")
+        reportTable.heading("Name", text="Customer Name")
+        reportTable.heading("Phone", text="Phone Number")
+        reportTable.heading("Net Total", text="Net Total")
+        reportTable.heading("Discount", text="Discount")
+        reportTable.heading("Date", text="Date")
+        reportTable["show"]="headings"
+        reportTable.column("bill_no",width=100)
+        reportTable.column("Name",width=200)
+        reportTable.column("Phone",width=100)
+        reportTable.column("Net Total",width=100)
+        reportTable.column("Discount",width=100)
+        reportTable.column("Date",width=150)
+        reportTable.pack(fill=BOTH, expand=1)
+        reportTable.bind("<ButtonRelease>",self.reget_cur)
+        self.show_all()
+
+
+        try:
+            global sum,Total,namesum
+            con = pymysql.connect(host="localhost",user="root", password="root1234",database="billdata")
+            cur = con.cursor()
+            q = "select * from report"
+            cur.execute(q)
+            con.commit()
+            rows = cur.fetchall()
+            reportTable.delete(*reportTable.get_children())
+            sum = 0
+            for row in rows:
+                singlerow = [row[0],row[1],row[2],row[3],row[4],row[5]]
+                reportTable.insert("",END, values=singlerow)
+                sum = sum+row[3]
+
+        except:
+            messagebox.showerror("Error","Something went wront with database",parent=reroot)
+
+        BtnFrame = LabelFrame(reroot,text="Buttons",font=("arail",12,"bold"),fg="gold",bg="purple",relief=GROOVE)
+        BtnFrame.place(x=0,y=580,relwidth=1,height=70)
+
+        exportbtn = Button(BtnFrame,command=self.export,text="Export",font=("arial",12,"bold"),bd=5,width=10).grid(row=0,column=0,padx=10,pady=5)
+        clearbtn = Button(BtnFrame,command=self.clear,text="Clear",font=("arial",12,"bold"),bd=5,width=10).grid(row=0,column=1,padx=10,pady=5)
+        showbtn = Button(BtnFrame,command=self.show_all,text="Show All",font=("arial",12,"bold"),bd=5,width=10).grid(row=0,column=2,padx=10,pady=5)
+        deletebtn = Button(BtnFrame,command=self.redelete,text="Delete",font=("arial",12,"bold"),bd=5,width=10).grid(row=0,column=3,padx=10,pady=5)
+        exitbtn = Button(BtnFrame,command=self.reexit,text="Exit",font=("arial",12,"bold"),bd=5,width=10).grid(row=0,column=4,padx=10,pady=5)
+
+        Totallife = Label(BtnFrame,text="Lifetime: BDT "+str(sum), font=("arial",12,"bold"),bg="purple",fg="white").grid(row=0,column=5,padx=10,pady=5)
+
+
+
+    def filter(self):
+        global bill,name,phone,date,namesum
+        bill = self.billVar.get()
+        name = self.nameVar.get()
+        phone = self.phnVar.get()
+        date = time.strftime("%d/%m/%Y")
+
+        if bill !="":
+            con = pymysql.connect(host="localhost",user="root", password="root1234",database="billdata")
+            cur = con.cursor()
+            q = "select * from report where bill_no=%s"
+            cur.execute(q,(self.billVar.get()))
+            con.commit()
+            rows = cur.fetchall()
+            reportTable.delete(*reportTable.get_children())
+
+            for row in rows:
+                singlerow = [row[0],row[1],row[2],row[3],row[4],row[5]]
+                reportTable.insert("",END, values=singlerow)
+
+        elif name !="":
+            con = pymysql.connect(host="localhost",user="root", password="root1234",database="billdata")
+            cur = con.cursor()
+            q = "select * from report where name=%s"
+            cur.execute(q,(name))
+            con.commit()
+            rows = cur.fetchall()
+            reportTable.delete(*reportTable.get_children())
+            for row in rows:
+                singlerow = [row[0],row[1],row[2],row[3],row[4],row[5]]
+                reportTable.insert("",END, values=singlerow)
+
+        elif phone !="":
+            con = pymysql.connect(host="localhost",user="root", password="root1234",database="billdata")
+            cur = con.cursor()
+            q = "select * from report where phone=%s"
+            cur.execute(q,(phone))
+            con.commit()
+            rows = cur.fetchall()
+            reportTable.delete(*reportTable.get_children())
+            for row in rows:
+                singlerow = [row[0],row[1],row[2],row[3],row[4],row[5]]
+                reportTable.insert("",END, values=singlerow)
+
+        elif date !="":
+            con = pymysql.connect(host="localhost",user="root", password="root1234",database="billdata")
+            cur = con.cursor()
+            q = "select * from report where date=%s"
+            cur.execute(q,(self.dateVar.get()))
+            con.commit()
+            rows = cur.fetchall()
+            reportTable.delete(*reportTable.get_children())
+            for row in rows:
+                singlerow = [row[0],row[1],row[2],row[3],row[4],row[5]]
+                reportTable.insert("",END, values=singlerow)
+
+    def export(self):
+        mess = messagebox.askyesno("Export","Do you want to export data?",parent=reroot)
+        if mess>0:
+
+            global file,reFrame
+            file = filedialog.asksaveasfilename()
+            data = reportTable.get_children()
+
+            bill,name,phone,total,discount,date=[],[],[],[],[],[]
+            for i in data:
+                content = reportTable.item(i)
+
+                pp = content["values"]
+                bill.append(pp[0]),
+                name.append(pp[1])
+                phone.append(pp[2])
+                total.append(pp[3])
+                discount.append(pp[4])
+                date.append(pp[5])
+            hh = ["Bill No","Name","Phone","Net Total","Discount","Date"]
+            df= pandas.DataFrame(list(zip(bill,name,phone,total,discount,date)),columns=hh)
+            paths = r"{}.csv".format(file)
+            df.to_csv(paths,index=False)
+            messagebox.showinfo("Saved", "File Save Successfully",parent=reroot)
+
+    def clear(self):
+        self.nameVar.set("")
+        self.phnVar.set("")
+        self.billVar.set("")
+        self.dateVar.set("")
+    def show_all(self):
+        con = pymysql.connect(host="localhost", user="root", password="root1234", database="billdata")
+        cur = con.cursor()
+        q = "select * from report"
+        cur.execute(q)
+        con.commit()
+        rows = cur.fetchall()
+
+        reportTable.delete(*reportTable.get_children())
+        for row in rows:
+            singlerow = [row[0], row[1], row[2], row[3], row[4], row[5]]
+            reportTable.insert("", END, values=singlerow)
+        self.clear()
+    def redelete(self):
+        mess = messagebox.askyesno("Delete","Do you want to delete record?",parent=reroot)
+        if mess>0:
+            con=pymysql.connect(host="localhost",user="root",password="root1234",database="billdata")
+            cur=con.cursor()
+            q = "delete from report where bill_no=%s"
+            cur.execute(q,(self.billVar.get()))
+            con.commit()
+            self.clear()
+            self.show_all()
+            con.close()
+            messagebox.showinfo("Deleted","Record deleted successfully.",parent=reroot)
+            reroot.destroy()
+            self.rewin()
+    def reget_cur(self,ev):
+        cc = reportTable.focus()
+        content = reportTable.item(cc)
+        pp = content["values"]
+        if len(pp)!=0:
+            self.billVar.set(pp[0])
+    def reexit(self):
+        mess = messagebox.askyesno("Exit","Do you want to exit?", parent=reroot)
+        if mess>0:
+            reroot.destroy()
+
+
 
 
 root = Tk()
