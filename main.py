@@ -791,7 +791,7 @@ class LoginWin:
         mess = messagebox.askyesno("Notification", "Do you want to close?", parent=self.billroot)
         if mess > 0:
             self.billroot.quit()
-        
+
 
     # =============== Add User window ===========================
 
