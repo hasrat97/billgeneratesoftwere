@@ -234,8 +234,33 @@ class LoginWin:
 
         #=======Calculation Frame=============
 
+        BottomFrame = LabelFrame(self.billroot, text="Calculation Area", bd=7, relief=GROOVE, fg="gold",font=("arial", 10, "bold"), bg="purple")
+        BottomFrame.place(x=0, relwidth=1, height=125, y=583)
+
+        Totallbl = Label(BottomFrame, text="Total Bill: ", font=("arail", 10, "bold"), bg="purple", fg="white").grid(row=0, column=0, padx=5, pady=5, sticky="w")
+        TotalEntry = Entry(BottomFrame, textvariable=self.totalVar, width=10, bd=5, relief=SUNKEN,font=("arail", 10, "bold")).grid(row=0, column=1, pady=5, padx=5)
+
+        Discountlbl = Label(BottomFrame, text="Discount: ", font=("arail", 10, "bold"), bg="purple", fg="white").grid(row=1, column=0, padx=5, pady=5, sticky="w")
+        DiscountEntry = Entry(BottomFrame, textvariable=self.DisVar, width=10, bd=5, relief=SUNKEN,font=("arail", 10, "bold")).grid(row=1, column=1, pady=5, padx=5)
+
+        NetTotallbl = Label(BottomFrame, text="Net Total: ", font=("arail", 12, "bold"), bg="purple", fg="white").grid(row=0, column=2, padx=5, pady=5, sticky="w")
+        NetTotalEntry = Entry(BottomFrame, textvariable=self.netTotalVar, width=10, bd=5, relief=SUNKEN,font=("arail", 12, "bold"), bg="red", fg="white").grid(row=0, column=3, pady=5, padx=5)
+
+        CPaylbl = Label(BottomFrame, text="Customer Pay: ", font=("arail", 10, "bold"), bg="purple", fg="white").grid(row=1, column=2, padx=5, pady=5, sticky="w")
+        CPayEntry = Entry(BottomFrame, textvariable=self.CpayVar, width=10, bd=5, relief=SUNKEN,font=("arail", 12, "bold")).grid(row=1, column=3, pady=5, padx=5)
+
+        CReturnlbl = Label(BottomFrame, text="Customer Return: ", font=("arail", 12, "bold"), bg="purple",fg="white").grid(row=0, column=4, padx=5, pady=5, sticky="w")
+        CReturnEntry = Entry(BottomFrame, textvariable=self.CreturenVar, width=10, bd=5, relief=SUNKEN,font=("arail", 12, "bold"), bg="skyblue", fg="red").grid(row=0, column=5, pady=5, padx=5)
         #==========Button frame===============
 
+        BtnFrame = Frame(BottomFrame, bd=7, relief=GROOVE)
+        BtnFrame.place(x=680, width=650, height=95)
+
+        Totalbtn = Button(BtnFrame, command=self.total_sum, text="Total", font=("arial", 12, "bold"), bg="purple",fg="white", pady=10, width=10, bd=7, activebackground="black", activeforeground="white").grid(row=0, column=0, pady=10, padx=3)
+        Gbillbtn = Button(BtnFrame, command=self.g_bill, text="Generate Bill", font=("arial", 12, "bold"), bg="purple",fg="white", pady=10, width=10, bd=7, activebackground="black", activeforeground="white").grid(row=0, column=1, pady=10, padx=3)
+        Clearbillbtn = Button(BtnFrame, command=self.clear_bill, text="Clear", font=("arial", 12, "bold"), bg="purple",fg="white", pady=10, width=10, bd=7, activebackground="black",activeforeground="white").grid(row=0, column=2, pady=10, padx=3)
+        printbtn = Button(BtnFrame, command=self.print_bill, text="Print", font=("arial", 12, "bold"), bg="purple",fg="white", pady=10, width=10, bd=7, activebackground="black", activeforeground="white").grid(row=0, column=3, pady=10, padx=3)
+        exittbtn = Button(BtnFrame, command=self.winexit, text="Exit", font=("arial", 12, "bold"), bg="purple",fg="white", pady=10, width=10, bd=7, activebackground="black", activeforeground="white").grid(row=0, column=4, pady=10, padx=3)
 
     def total_sum(self):
         global ccashreturn,stockqty1,price1,price2,price3,price4,price5,price6,price7,price8,price9,price10,totalp1,totalp2,totalp3,totalp4,totalp5,totalp6,totalp7,totalp8,totalp9,totalp10
@@ -426,10 +451,53 @@ class LoginWin:
                 self.CreturenVar.set(str(self.ccashreturn))
 
     def welcomebill(self):
-        pass
+
+        global edate, etime
+        self.edate = time.strftime("%d/%m/%Y")
+        self.etime = time.strftime("%H:%M:%S")
+        # qrimg = PhotoImage(file="qrcodes/6878.png")
+
+        self.txtarea.delete("1.0", END)
+        self.txtarea.insert(END, f"\t\t\t Welcome to Our Store \n")
+        self.txtarea.insert(END, "\t \t \t Phone No: 017000000000 \n\n")
+        self.txtarea.insert(END, "================================================================\n")
+        self.txtarea.insert(END, f" Bill No: {self.billnoVar.get()} \n")
+        self.txtarea.insert(END, f" Customer Name: {self.CnameVar.get()} \n")
+        self.txtarea.insert(END, f" Phone Number: {self.CphoneVar.get()} \n")
+        self.txtarea.insert(END, f" Date: {self.edate}, Time: {self.etime} \n")
+        self.txtarea.insert(END, "================================================================\n")
+        self.txtarea.insert(END, "| Product Name |\t    | Quantity |\t    | Price |\n")
+        self.txtarea.insert(END, "================================================================\n\n")
+
 
     def g_bill(self):
-        pass
+
+        mess = messagebox.askyesno("Notification", "Do you want to Generate Bill?", parent=self.billroot)
+        if mess > 0:
+            global newstock1, newstock2, newstock3, newstock4, newstock5, newstock6, newstock7, newstock8, newstock9, newstock10, oldstock1
+            self.blank_sp = "                      "
+            self.p1 = self.ProductOne.get() + self.blank_sp
+            self.p2 = self.ProductTwo.get() + self.blank_sp
+            self.p3 = self.ProductThree.get() + self.blank_sp
+            self.p4 = self.ProductFour.get() + self.blank_sp
+            self.p5 = self.ProductFive.get() + self.blank_sp
+            self.p6 = self.ProductSix.get() + self.blank_sp
+            self.p7 = self.ProductSeven.get() + self.blank_sp
+            self.p8 = self.ProductEight.get() + self.blank_sp
+            self.p9 = self.ProductNine.get() + self.blank_sp
+            self.p10 = self.ProductTen.get() + self.blank_sp
+
+            if self.CnameVar.get() == "" or self.CphoneVar.get() == "":
+                messagebox.showerror("Error", "Name and Phone number are required!")
+            elif self.totalVar.get() == "":
+                messagebox.showerror("Error", "No product selected.")
+            elif self.ProductOne.get() == "--Select One--" and self.ProductTwo.get() == "--Select One--" and self.ProductThree.get() == "--Select One--" and self.ProductFour.get() == "--Select One--" \
+                    and self.ProductFive.get() == "--Select One--" and self.ProductSix.get() == "--Select One--" and self.ProductSeven.get() == "--Select One--" and self.ProductEight.get() == "--Select One--" \
+                    and self.ProductNine.get() == "--Select One--" and self.ProductTen.get() == "--Select One--":
+                messagebox.showerror("Error", "Please a select product name")
+            else:
+                self.welcomebill()
+
 
 
 
