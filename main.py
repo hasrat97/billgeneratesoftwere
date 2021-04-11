@@ -224,6 +224,215 @@ class LoginWin:
         scroll_y.config(command=self.txtarea.yview)
         self.txtarea.pack(fill=BOTH, expand=1)
 
+        self.welcomebill()
+        if admin == "Admin":
+            ConFrame = LabelFrame(ProFrame, text="Control Backend", font=("arial", 12, "bold"), fg="gold", bd=7,relief=GROOVE)
+            ConFrame.place(x=300, y=300, width=430, height=120)
+            addtbtn = Button(ConFrame, command=self.AddPro, text="Add Product", font=("arial", 10, "bold"), bg="purple",fg="white", pady=5, bd=7, activebackground="black", activeforeground="white").grid(row=0,column=0,pady=15,padx=5)
+            salesreportbtn = Button(ConFrame, command=self.rewin, text="View Report", font=("arial", 10, "bold"),bg="purple", fg="white", pady=5, bd=7, activebackground="black",activeforeground="white").grid(row=0, column=1, pady=15, padx=5)
+            addusertbtn = Button(ConFrame, command=self.AddUser, text="Add User", font=("arial", 10, "bold"),bg="purple", fg="white", pady=5, bd=7, activebackground="black",activeforeground="white").grid(row=0, column=2, pady=15, padx=5)
+
+        #=======Calculation Frame=============
+
+        #==========Button frame===============
+
+
+    def total_sum(self):
+        global ccashreturn,stockqty1,price1,price2,price3,price4,price5,price6,price7,price8,price9,price10,totalp1,totalp2,totalp3,totalp4,totalp5,totalp6,totalp7,totalp8,totalp9,totalp10
+        if self.CnameVar.get() == "" and self.CphoneVar.get() == "":
+            messagebox.showerror("Error", "Some fields are required")
+        #elif stock1<self.Qty1Var.get():
+            #messagebox.showerror("Error", "OOOPS! Product haven't enough stock")
+        else:
+            self.Qtyone = self.Qty1Var.get()
+            self.Qtytwo = self.Qty2Var.get()
+            self.Qtythree = self.Qty3Var.get()
+            self.Qtyfour = self.Qty4Var.get()
+            self.Qtyfive = self.Qty5Var.get()
+            self.Qtysix = self.Qty6Var.get()
+            self.Qtyseven = self.Qty7Var.get()
+            self.Qtyeight = self.Qty8Var.get()
+            self.Qtynine = self.Qty9Var.get()
+            self.Qtyten = self.Qty10Var.get()
+
+
+            if self.Qty1Var.get() !=0:
+                #========== query For Product One ================
+                con = pymysql.connect(host="localhost", user="root", password="root1234", database="billdata")
+                cur = con.cursor()
+                q = "select * from product where title=%s"
+                cur.execute(q, (self.ProductOne.get()))
+                rows = cur.fetchall()
+                for row in rows:
+                    self.price1 = row[2]
+                    self.totalp1 = self.price1 * self.Qtyone
+                con.commit()
+                con.close()
+            else:
+                self.price1 = 0
+            self.netprice = float(self.price1*self.Qtyone)
+
+            if self.Qty2Var.get() !=0:
+                #========== query For Product Two ================
+                con = pymysql.connect(host="localhost", user="root", password="root1234", database="billdata")
+                cur = con.cursor()
+                q = "select * from product where title=%s"
+                cur.execute(q, (self.ProductTwo.get()))
+                rows = cur.fetchall()
+                for row in rows:
+                    self.price2 = row[2]
+                    self.totalp2 = self.price2 * self.Qtytwo
+                con.commit()
+                con.close()
+            else:
+                self.price2 = 0
+            self.netprice = float(self.netprice+(self.price2*self.Qtytwo))
+
+            if self.Qty3Var.get() !=0:
+                #========== query For Product Three ================
+                con = pymysql.connect(host="localhost", user="root", password="root1234", database="billdata")
+                cur = con.cursor()
+                q = "select * from product where title=%s"
+                cur.execute(q, (self.ProductThree.get()))
+                rows = cur.fetchall()
+                for row in rows:
+                    self.price3 = row[2]
+                    self.totalp3 = self.price3 * self.Qtythree
+                con.commit()
+                con.close()
+            else:
+                self.price3 = 0
+            self.netprice = float(self.netprice+(self.price3*self.Qtythree))
+
+            if self.Qty4Var.get() !=0:
+                #========== query For Product Four ================
+                con = pymysql.connect(host="localhost", user="root", password="root1234", database="billdata")
+                cur = con.cursor()
+                q = "select * from product where title=%s"
+                cur.execute(q, (self.ProductFour.get()))
+                rows = cur.fetchall()
+                for row in rows:
+                    self.price4 = row[2]
+                    self.totalp4 = self.price4 * self.Qtyfour
+                con.commit()
+                con.close()
+            else:
+                self.price4 = 0
+            self.netprice = float(self.netprice + (self.price4 * self.Qtyfour))
+
+            if self.Qty5Var.get() !=0:
+                #========== query For Product Five ================
+                con = pymysql.connect(host="localhost", user="root", password="root1234", database="billdata")
+                cur = con.cursor()
+                q = "select * from product where title=%s"
+                cur.execute(q, (self.ProductFive.get()))
+                rows = cur.fetchall()
+                for row in rows:
+                    self.price5 = row[2]
+                    self.totalp5 = self.price5 * self.Qtyfive
+                con.commit()
+                con.close()
+            else:
+                self.price5 = 0
+            self.netprice = float(self.netprice + (self.price5 * self.Qtyfive))
+
+            if self.Qty6Var.get() !=0:
+                #========== query For Product Six ================
+                con = pymysql.connect(host="localhost", user="root", password="root1234", database="billdata")
+                cur = con.cursor()
+                q = "select * from product where title=%s"
+                cur.execute(q, (self.ProductSix.get()))
+                rows = cur.fetchall()
+                for row in rows:
+                    self.price6 = row[2]
+                    self.totalp6 = self.price6 * self.Qtysix
+                con.commit()
+                con.close()
+            else:
+                self.price6 = 0
+            self.netprice = float(self.netprice + (self.price6 * self.Qtysix))
+
+            if self.Qty7Var.get() !=0:
+                #========== query For Product Seven ================
+                con = pymysql.connect(host="localhost", user="root", password="root1234", database="billdata")
+                cur = con.cursor()
+                q = "select * from product where title=%s"
+                cur.execute(q, (self.ProductSeven.get()))
+                rows = cur.fetchall()
+                for row in rows:
+                    self.price7 = row[2]
+                    self.totalp7 = self.price7 * self.Qtyseven
+                con.commit()
+                con.close()
+            else:
+                self.price7 = 0
+            self.netprice = float(self.netprice + (self.price7 * self.Qtyseven))
+
+            if self.Qty8Var.get() !=0:
+                #========== query For Product Eight ================
+                con = pymysql.connect(host="localhost", user="root", password="root1234", database="billdata")
+                cur = con.cursor()
+                q = "select * from product where title=%s"
+                cur.execute(q, (self.ProductEight.get()))
+                rows = cur.fetchall()
+                for row in rows:
+                    self.price8 = row[2]
+                    self.totalp8 = self.price8 * self.Qtyeight
+                con.commit()
+                con.close()
+            else:
+                self.price8 = 0
+            self.netprice = float(self.netprice + (self.price8 * self.Qtyeight))
+
+            if self.Qty9Var.get() !=0:
+                #========== query For Product Nine ================
+                con = pymysql.connect(host="localhost", user="root", password="root1234", database="billdata")
+                cur = con.cursor()
+                q = "select * from product where title=%s"
+                cur.execute(q, (self.ProductNine.get()))
+                rows = cur.fetchall()
+                for row in rows:
+                    self.price9 = row[2]
+                    self.totalp9 = self.price9 * self.Qtynine
+                con.commit()
+                con.close()
+            else:
+                self.price9 = 0
+            self.netprice = float(self.netprice + (self.price9 * self.Qtynine))
+
+            if self.Qty10Var.get() !=0:
+                #========== query For Product Ten ================
+                con = pymysql.connect(host="localhost", user="root", password="root1234", database="billdata")
+                cur = con.cursor()
+                q = "select * from product where title=%s"
+                cur.execute(q, (self.ProductTen.get()))
+                rows = cur.fetchall()
+                for row in rows:
+                    self.price10 = row[2]
+                    self.totalp10 = self.price10 * self.Qtyten
+                con.commit()
+                con.close()
+            else:
+                self.price10 = 0
+            self.netprice = float(self.netprice + (self.price10 * self.Qtyten))
+            self.totalVar.set(str(self.netprice))
+
+            self.netbill = self.netprice - self.DisVar.get()
+            self.netTotalVar.set(str(self.netbill))
+
+            self.cpaycash = self.CpayVar.get()
+            if self.cpaycash !=0:
+                self.ccashreturn = self.cpaycash - self.netbill
+                self.CreturenVar.set(str(self.ccashreturn))
+
+    def welcomebill(self):
+        pass
+
+    def g_bill(self):
+        pass
+
+
+
 
 root = Tk()
 obj = LoginWin(root)
