@@ -709,7 +709,13 @@ class LoginWin:
                 messagebox.showerror("Error", "Something went wrong with your database", parent=self.billroot)
 
     def save_bill(self):
-        pass
+
+        self.data = self.txtarea.get("1.0", END)
+        file = open("saveBill/" + str(self.billnoVar.get()) + ".txt", "w")
+        file.write(self.data)
+        file.close()
+        messagebox.showinfo("Saved", "Bill " + self.billnoVar.get() + " saved successfully.", parent=self.billroot)
+
     def search_bill(self):
         m = "no"
         for i in os.listdir("saveBill/"):
@@ -724,7 +730,68 @@ class LoginWin:
             messagebox.showerror("Error", "Invalid Bill Number.", parent=self.billroot)
 
     def clear_bill(self):
-        pass
+
+        mess = messagebox.askyesno("Clear", "Do you want to clear?", parent=self.billroot)
+        if mess > 0:
+            # ========= Variables ===================
+
+            # ============ customer Info Var ============
+
+            self.CnameVar.set("")
+            self.CphoneVar.set("")
+            self.billnoVar.set("")
+
+            r_bill = random.randint(1000, 9999)
+            self.billnoVar.set(r_bill)
+
+            self.billsearchVar.set("")
+
+            # ============ Products Form Var ============
+            self.Qty1Var.set(0)
+            self.Qty2Var.set(0)
+            self.Qty3Var.set(0)
+            self.Qty4Var.set(0)
+            self.Qty5Var.set(0)
+            self.Qty6Var.set(0)
+            self.Qty7Var.set(0)
+            self.Qty8Var.set(0)
+            self.Qty9Var.set(0)
+            self.Qty10Var.set(0)
+
+            self.ProductOne.set("--Select One--")
+            self.ProductTwo.set("--Select One--")
+            self.ProductThree.set("--Select One--")
+            self.ProductFour.set("--Select One--")
+            self.ProductFive.set("--Select One--")
+            self.ProductSix.set("--Select One--")
+            self.ProductSeven.set("--Select One--")
+            self.ProductEight.set("--Select One--")
+            self.ProductNine.set("--Select One--")
+            self.ProductTen.set("--Select One--")
+
+            # ============ Bottom Form Var ============
+            self.totalVar.set("")
+            self.DisVar.set(0)
+            self.netTotalVar.set("")
+            self.CpayVar.set(0)
+            self.CreturenVar.set("")
+
+            self.txtarea.delete("1.0", END)
+            self.welcomebill()
+
+    def print_bill(self):
+        mess = messagebox.askyesno("Print", "Do you want print " + self.billnoVar.get() + " ?", parent=self.billroot)
+        if mess > 0:
+            d = self.txtarea.get("1.0", END)
+            temfile = tempfile.mktemp(".txt")
+            open(temfile, "w").write(d)
+            os.startfile(temfile, "print")
+
+    def winexit(self):
+        mess = messagebox.askyesno("Notification", "Do you want to close?", parent=self.billroot)
+        if mess > 0:
+            self.billroot.quit()
+        
 
     # =============== Add User window ===========================
 
